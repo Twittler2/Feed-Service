@@ -1,0 +1,38 @@
+{
+  "name": "Thesis",
+  "version": "",
+  "description": "",
+  "author": "",
+  "license": "",
+  "engines": {
+    "node": ">=6.4.0"
+  },
+  "scripts": {
+    "server": "nodemon ./server/index.js",
+    "test": "mocha --exit"
+  },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "cassandra-driver": "^3.3.0",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "express": "^4.16.2",
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.5",
+    "path": "^0.12.7",
+    "pg": "^7.4.0",
+    "request": "^2.83.0",
+    "supertest": "^3.0.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.11.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-airbnb-bundle": "^1.1.7",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.5.1"
+  }
+}

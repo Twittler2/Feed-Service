@@ -28,7 +28,7 @@ const createIndex = () => {
     .catch(err => console.log('error', err));
 };
 
-createIndex();
+// createIndex();
 
 const createFeed = (ct, queries) => {
   const tweets = [];
@@ -67,7 +67,7 @@ const createData = (client, counter = 0) => {
     .catch(error => console.log('error occur', error));
 };
 
-createData(client);
+// createData(client);
 
 router.get('/createData', (req, res) => {});
 

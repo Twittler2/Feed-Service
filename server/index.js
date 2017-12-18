@@ -1,3 +1,7 @@
+const apm = require('elastic-apm-node').start({
+  appName: 'feed servie',
+  serverUrl: 'http://localhost:8200',
+});
 const express = require('express');
 const bodyParser = require('body-parser');
 const Path = require('path');
@@ -11,8 +15,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(apm.middleware.express());
+
 app.use('/feeds', feeds);
-app.use('/newtweets', newTweets);
+app.use('/tweets', newTweets);
 // app.use('/createData', createData);
 
 // data.createData(data.client);

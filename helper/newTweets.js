@@ -8,7 +8,7 @@ client.connect((err, result) => {
   console.log('cassandra connected');
 });
 
-const editFeedByUserId = 'UPDATE feedservice.test SET tweets = tweets + ? WHERE user_id = ?';
+const editFeedByUserId = 'UPDATE feedservice.feed SET tweets = tweets + ? WHERE user_id = ?';
 
 router.post('/', (req, res) => {
   const { users, tweet } = req.body;

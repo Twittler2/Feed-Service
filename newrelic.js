@@ -1,5 +1,5 @@
 'use strict'
-const newRelicKey = require('./config').newRelicKeys;
+const { newRelicKey } = require('./config');
 /**
  * New Relic agent configuration.
  *

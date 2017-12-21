@@ -3,7 +3,7 @@ const express = require('express');
 const uniqid = require('uniqid');
 const cassandra = require('cassandra-driver');
 
-const elastic = require('./elasticsearch');
+// const elastic = require('./elasticsearch');
 
 const router = express.Router();
 
@@ -15,18 +15,18 @@ client.connect((err, result) => {
 
 let number = 1;
 
-const createIndex = () => {
-  elastic
-    .indexExists()
-    .then((exists) => {
-      if (exists) {
-        return elastic.deleteIndex().then(() => console.log('deleted index'));
-      }
-    })
-    .then(() => elastic.initIndex())
-    .then(() => elastic.initMapping())
-    .catch(err => console.log('error', err));
-};
+// const createIndex = () => {
+//   elastic
+//     .indexExists()
+//     .then((exists) => {
+//       if (exists) {
+//         return elastic.deleteIndex().then(() => console.log('deleted index'));
+//       }
+//     })
+//     .then(() => elastic.initIndex())
+//     .then(() => elastic.initMapping())
+//     .catch(err => console.log('error', err));
+// };
 
 // createIndex();
 
@@ -43,7 +43,7 @@ const createFeed = (ct, queries) => {
     }
     tweets.push(tweet);
   }
-  const query = 'INSERT INTO feedservice.feed (user_id, ad_count, tweets) VALUES (?, ?, ?)';
+  const query = 'INSERT INTO feedservice.test (user_id, ad_count, tweets) VALUES (?, ?, ?)';
   queries.push({ query, params: [number, adCount, tweets] });
   // elastic.addDocument([number, adCount, tweets]);
   number += 1;
@@ -57,7 +57,7 @@ const createData = (client, counter = 0) => {
   client.batch(queries, { prepare: true })
     .then(() => {
       counter += 50;
-      if (counter < 10000000) {
+      if (counter < 10000) {
         if (counter % 1000 === 0) {
           console.log(counter);
         }

@@ -1,7 +1,13 @@
 const express = require('express');
+const cassandra = require('cassandra-driver');
+const redis = require('redis');
 
 const router = express.Router();
-const cassandra = require('cassandra-driver');
+
+const redisClient = redis.createClient();
+redisClient.on('connect', () => {
+  console.log('redis connected');
+});
 
 const client = new cassandra.Client({ contactPoints: ['127.0.0.1'] });
 client.connect((err, result) => {
@@ -12,19 +18,25 @@ const getFeedByUserId = 'SELECT * FROM feedservice.feed WHERE user_id = ? ALLOW 
 
 router.get('/:user_id', (req, res) => {
   const userId = +req.params.user_id;
-  client.execute(getFeedByUserId, [userId], { prepare: true }, (err, result) => {
-    if (err) {
-      res.status(404).send({ msg: err });
+
+  redisClient.get(userId, (error, redisResult) => {
+    if (redisResult) {
+      res.status(200).send(JSON.parse(redisResult));
     } else {
-      result = result.rows[0];
-      const respond = { user_id: result.user_id };
-      const tweets = result.tweets;
-      if (tweets.length > 5) {
-        respond.tweets = tweets.slice(tweets.length - 5);
-      } else {
-        respond.tweets = tweets.slice();
-      }
-      res.status(200).send(respond);
+      client.execute(getFeedByUserId, [userId], { prepare: true })
+        .then((result) => {
+          result = result.rows[0];
+          const respond = { user_id: result.user_id };
+          const tweets = result.tweets;
+          if (tweets.length > 5) {
+            respond.tweets = tweets.slice(tweets.length - 5);
+          } else {
+            respond.tweets = tweets.slice();
+          }
+          redisClient.setex(userId, 60, JSON.stringify(respond));
+          res.status(200).send(respond);
+        })
+        .catch(err => console.log('error occured', err));
     }
   });
 });
